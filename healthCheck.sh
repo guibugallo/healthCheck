@@ -2,9 +2,10 @@
 
 # Função para mostrar ajuda
 show_help() {
-    echo "Uso: $0 {-usodisco|-usomem}"
+    echo "Uso: $0 {-usodisco|-usomem|-geral}"
     echo "  -usodisco   Mostra os 5 maiores arquivos e suas respectivas pastas por consumo de disco."
     echo "  -usomem     Mostra os 5 processos que mais consomem memória e seus respectivos PIDs."
+    echo "  -geral      Mostra informações gerais de uso de disco e memória."
     exit 1
 }
 
@@ -20,6 +21,17 @@ usomem() {
     ps aux --sort=-%mem | awk 'NR<=6 {print $2, $4, $11}' | column -t
 }
 
+# Função para mostrar informações gerais de uso de disco e memória
+geral() {
+    echo "=== Informações Gerais ==="
+    echo
+    echo "Uso de Disco:"
+    usodisco
+    echo
+    echo "Uso de Memória:"
+    usomem
+}
+
 # Verifica se há argumentos passados e exibe a ajuda se necessário
 if [ $# -eq 0 ]; then
     show_help
@@ -32,6 +44,9 @@ case "$1" in
         ;;
     -usomem)
         usomem
+        ;;
+    -geral)
+        geral
         ;;
     --help)
         show_help
